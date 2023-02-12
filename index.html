@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="icon" href="./assets/img/pokeball-color-shine.png">
+        <title>PokéDraw</title>
+        <!-- JQuery -->
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+        <!-- Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/d43c869f70.js" crossorigin="anonymous"></script>
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
+        <!-- Script personnalisé -->
+        <script src="./assets/js/index.js"></script>
+        <script src="./assets/js/firebase.js" type="module"></script>
+        <!-- <script src="./assets/js/stockage-local.js" type="module"></script> -->
+    </head>
+    <body>
+        <nav class="navbar navbar-dark bg-dark">
+            <!-- Navbar content -->
+            <a class="navbar-brand" href="#"> <img height="25px" width="25px" src="./assets/img/pokeballs.png"> PokéDraw</a>
+            <!-- <a class="btn btn-success" href="./assets/html/connexion.html" id="bouton-page-connexion" type="button"><i class="fa-solid fa-user"></i> Connexion</a> -->
+        </nav>
+        <div class="container mt-5">
+            <div class="mb-3">
+                <div class="alert alert-info" role="alert">
+                    <a href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons">Pokemon icons created by Darius Dan - Flaticon</a>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    <a href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons">Pokemon icons created by Freepik - Flaticon</a>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <button class="btn btn-info btn-lg btn-block mb-1" id="bouton-tirage-accessoire" type="button"><i class="fa-solid fa-dice"></i> Tirage de l'item</button>
+            <input class="form-control text-center mb-5" id="acessoire-tire" placeholder="Cliquez sur le bouton pour tirer un item au sort..." readonly type="text">
+            <label id="label-affichage-pokemons" for="affichage-pokemons">Nombre de Pokémon affiché(s): <span id="nombre-pokemons-affiches">151</span></label>
+            <input class="custom-range mb-5" id="affichage-pokemons" min="1" max="151" step="1" type="range" value="151">
+            <!-- Division qui contiendra l'affichage des pokémons -->
+            <div class="row" id="cartes-pokemons">
+
+            </div>
+        </div>
+    </body>
+</html>
