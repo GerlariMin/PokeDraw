@@ -45,14 +45,9 @@ function aficher_pokemons() {
                 '    <img src="' + pokemon.sprites.front_default + '" class="card-img-top" alt="' + pokemon.name + '">\n' +
                 '    <div class="card-body bg-light">\n' +
                 '      <h5 class="card-title"> #' + pokemon.id + ' <span style="text-transform:uppercase;">' + pokemon.name + '</span></h5>\n' +
-                '      <div class="row">\n' +
-                '        <div class="col-8">\n' +
-                '          <p class="card-text"> Height: ' + (pokemon.height)*10 + ' cm </p>\n' +
-                '          <p class="card-text"> Weight: ' + (pokemon.weight)/10 + ' Kg </p>\n' +
-                '        </div>\n' +
-                '        <div class="col-4 text-white text-bolder" id="types-pokemon-' + pokemon.id + '">\n' +
-                '        </div>\n' +
+                '      <div class="mb-1 row" id="types-pokemon-' + pokemon.id + '">\n' +
                 '      </div>\n' +
+                '          <p class="card-text">Height: ' + (pokemon.height)*10 + ' cm <br>Weight: ' + (pokemon.weight)/10 + ' Kg </p>\n' +
                 '    </div>\n' +
                 '  </div>' +
                 '</div>');
@@ -67,7 +62,7 @@ function aficher_pokemons() {
                 let fond_carte_pokemon_courant = 'linear-gradient(to right, ';
                 pokemon.types.forEach(function( type) {
                     // Création du badge de type du pokémon courant
-                    $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill" style="background-color: #' + types_pokemons[type.type.name] + '">' + type.type.name + '</span>');
+                    $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill col-4 m-1 text-bolder text-white" style="background-color: #' + types_pokemons[type.type.name] + '">' + type.type.name + '</span>');
                     // Calcul du pourcentage que va prendre la couleur du type courant en couleur de fond
                     let pourcentage = Math.round((indice_type_courant/nombre_types)*100);
                     // Actualisation de la propriété CSS du fond de la carte courante
@@ -82,7 +77,7 @@ function aficher_pokemons() {
             // Sinon, le pokémon courant n'a qu'un seul type
             } else {
                 // Création du badge de type du pokémon courant
-                $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill" style="background-color: #' + types_pokemons[pokemon.types[0].type.name] + '">' + pokemon.types[0].type.name + '</span>');
+                $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill col-4 m-1 text-bolder text-white" style="background-color: #' + types_pokemons[pokemon.types[0].type.name] + '">' + pokemon.types[0].type.name + '</span>');
                 // Génération de la propriété CSS pour attribuer une unique couleur de fond pour l'unique type du pokémon courant
                 $('#pokemon-' + pokemon.id).css('background-color', '#' + types_pokemons[pokemon.types[0].type.name]);
             }
@@ -92,10 +87,17 @@ function aficher_pokemons() {
 function tirage_item() {
     let indice_accessoire_max = accessoires.length;
     let indice_tire = Math.floor(Math.random() * indice_accessoire_max);
-    $('#acessoire-tire').val(accessoires[indice_tire]);
+    $('#accessoire-tire').val(accessoires[indice_tire]);
+}
+function copier_dans_presse_papier() {
+    navigator.clipboard.writeText($('#accessoire-tire').val());
+    $('#bouton-copie-presse-papier').tooltip('enable');
+    $('#bouton-copie-presse-papier').tooltip('show');
 }
 // On attend que le document HTML soit chargé sur le navigateur du client avant d'effecteur les opérations souhaitées.
 $(document).ready(function () {
+    $('#bouton-copie-presse-papier').tooltip('disable');
+    $('#bouton-copie-presse-papier').tooltip('hide');
     // Affichage de tous les pokémons
     aficher_pokemons();
     // En fonction du choix de l'utilisateur, on affiche les pokémons souhaités.
@@ -104,5 +106,9 @@ $(document).ready(function () {
     });
     $('#bouton-tirage-accessoire').click(function () {
         tirage_item();
+        copier_dans_presse_papier();
+    });
+    $('#bouton-copie-presse-papier').click(function () {
+        copier_dans_presse_papier();
     });
 });
