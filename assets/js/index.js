@@ -24,22 +24,33 @@ const types_pokemons = {
     'unknow' : 'FFFFFF',
     'shadow' : '693963',
 };
+/**
+ * Tableau recenssant les accessoires utilisés pour le tirage au sort
+ * @type {string[]}
+ */
 const accessoires = ['Lunettes', 'Livre', 'Gants', 'Bottes', 'Bonnet', 'Chapeau', 'Bandana'];
+const id_accessoire_tire = 'accessoire-tire';
+const id_affichage_pokemons = 'affichage-pokemons';
+const id_bouton_copie_presse_papier = 'bouton-copie-presse-papier';
+const id_bouton_tirage_accessoire = 'bouton-tirage-accessoire';
+const id_cartes_pokemons = 'cartes-pokemons';
+const id_nombre_pokemons_affiches = 'nombre-pokemons-affiches';
+
 /**
  * Fonction qui génère l'affichage des cartes de présentation des pokémons
  */
 async function aficher_pokemons() {
     // Actualisation du span affichant le nombre de pokémons à afficher sur la page
-    $('#nombre-pokemons-affiches').text($('#affichage-pokemons').val());
+    $('#' + id_nombre_pokemons_affiches).text($('#' + id_affichage_pokemons).val());
     // Cast du nombre de pokémons à afficher en entier
-    let nombre_pokemons_a_affichier = parseInt($('#affichage-pokemons').val());
+    let nombre_pokemons_a_affichier = parseInt($('#' + id_affichage_pokemons).val());
     // Réinitialisation du contenu de l'élément HTML accueillant les cartes de présentation des pokémons
-    $('#cartes-pokemons').html('');
+    $('#' + id_cartes_pokemons).html('');
     // Pour chaque pokémon dont l'id est comprit entre 1 et le nombre max désiré par l'utilisateur
     for (let id_pokemon = 1; id_pokemon <= nombre_pokemons_a_affichier; id_pokemon++) {
         await recuperer_informations_pokemon(id_pokemon).then(function (pokemon) {
             // On génère une carte de présentation avec les informations que l'on souhaite afficher pour le pokémon courant
-            $('#cartes-pokemons').append('<div class="col-4 mt-3 mb-3">' +
+            $('#' + id_cartes_pokemons).append('<div class="col-4 mt-3 mb-3">' +
                 '  <div class="card w-100" id="pokemon-' + pokemon.id + '" style="width: 18rem;">\n' +
                 '    <img src="' + pokemon.sprites.front_default + '" class="card-img-top" alt="' + pokemon.name + '">\n' +
                 '    <div class="card-body bg-light">\n' +
@@ -83,16 +94,49 @@ async function aficher_pokemons() {
         });
     }
 }
+
+/**
+ * Copie de la valeur de l'input en lecture seule
+ * On infore l'utilisateur de la copie avec le tooltip prévu à cet effet (puis on le retire au bout de 3 secondes)
+ */
 function copier_dans_presse_papier() {
-    navigator.clipboard.writeText($('#accessoire-tire').val());
-    $('#bouton-copie-presse-papier').tooltip('enable');
-    $('#bouton-copie-presse-papier').tooltip('show');
+    navigator.clipboard.writeText($('#' + id_accessoire_tire).val());
+    montrer_tooltip_copie_presse_papier();
+    setTimeout(function() {
+        masquer_tooltip_copie_presse_papier();
+    },3000);
 }
+
+/**
+ * Enlever le tooltip
+ */
+function masquer_tooltip_copie_presse_papier() {
+    $('#' + id_bouton_copie_presse_papier).tooltip('hide');
+    $('#' + id_bouton_copie_presse_papier).tooltip('disable');
+}
+
+/**
+ * Affichage du tooltip
+ */
+function montrer_tooltip_copie_presse_papier() {
+    $('#' + id_bouton_copie_presse_papier).tooltip('enable');
+    $('#' + id_bouton_copie_presse_papier).tooltip('show');
+}
+
+/**
+ * Tirage aléatoire d'une valeur issue du tableau recenssant les accessoires
+ */
 function tirage_item() {
     let indice_accessoire_max = accessoires.length;
     let indice_tire = Math.floor(Math.random() * indice_accessoire_max);
-    $('#accessoire-tire').val(accessoires[indice_tire]);
+    $('#' + id_accessoire_tire).val(accessoires[indice_tire]);
 }
+
+/**
+ * Récupération des information d'un pokemon d'indice donné via l'API PokeAPI
+ * @param indice_pokemon
+ * @returns {Promise<*>}
+ */
 async function recuperer_informations_pokemon(indice_pokemon) {
     // returns a promise that can be used later.
     return $.get({
@@ -101,19 +145,21 @@ async function recuperer_informations_pokemon(indice_pokemon) {
 }
 // On attend que le document HTML soit chargé sur le navigateur du client avant d'effecteur les opérations souhaitées.
 $(document).ready(function () {
-    $('#bouton-copie-presse-papier').tooltip('disable');
-    $('#bouton-copie-presse-papier').tooltip('hide');
+    // Désactivation du tooltip
+    masquer_tooltip_copie_presse_papier();
     // Affichage de tous les pokémons
     aficher_pokemons();
     // En fonction du choix de l'utilisateur, on affiche les pokémons souhaités.
-    $('#affichage-pokemons').change(function () {
+    $('#' + id_affichage_pokemons).change(function () {
         aficher_pokemons();
     });
-    $('#bouton-tirage-accessoire').click(function () {
+    // Lorsque l'on clique sur le bouton dédié au tirage au sort, on actualise la valeur de l'input en lecture seule et on copie cette même valeur dans le presse papier
+    $('#' + id_bouton_tirage_accessoire).click(function () {
         tirage_item();
         copier_dans_presse_papier();
     });
-    $('#bouton-copie-presse-papier').click(function () {
+    // Lorsque l'utilisateur clique sur le bouton copier/ coller, on la met dans le presse papier
+    $('#' + id_bouton_copie_presse_papier).click(function () {
         copier_dans_presse_papier();
     });
 });
