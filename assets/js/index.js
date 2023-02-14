@@ -28,7 +28,7 @@ const accessoires = ['Lunettes', 'Livre', 'Gants', 'Bottes', 'Bonnet', 'Chapeau'
 /**
  * Fonction qui génère l'affichage des cartes de présentation des pokémons
  */
-function aficher_pokemons() {
+async function aficher_pokemons() {
     // Actualisation du span affichant le nombre de pokémons à afficher sur la page
     $('#nombre-pokemons-affiches').text($('#affichage-pokemons').val());
     // Cast du nombre de pokémons à afficher en entier
@@ -37,8 +37,7 @@ function aficher_pokemons() {
     $('#cartes-pokemons').html('');
     // Pour chaque pokémon dont l'id est comprit entre 1 et le nombre max désiré par l'utilisateur
     for (let id_pokemon = 1; id_pokemon <= nombre_pokemons_a_affichier; id_pokemon++) {
-        // On interroge l'API dédiée pour récupérer les information à propos du pokémon courant
-        $.get("https://pokeapi.co/api/v2/pokemon/" + id_pokemon, function (pokemon) {
+        await recuperer_informations_pokemon(id_pokemon).then(function (pokemon) {
             // On génère une carte de présentation avec les informations que l'on souhaite afficher pour le pokémon courant
             $('#cartes-pokemons').append('<div class="col-4 mt-3 mb-3">' +
                 '  <div class="card w-100" id="pokemon-' + pokemon.id + '" style="width: 18rem;">\n' +
@@ -47,7 +46,7 @@ function aficher_pokemons() {
                 '      <h5 class="card-title"> #' + pokemon.id + ' <span style="text-transform:uppercase;">' + pokemon.name + '</span></h5>\n' +
                 '      <div class="mb-1 row" id="types-pokemon-' + pokemon.id + '">\n' +
                 '      </div>\n' +
-                '          <p class="card-text">Height: ' + (pokemon.height)*10 + ' cm <br>Weight: ' + (pokemon.weight)/10 + ' Kg </p>\n' +
+                '          <p class="card-text">Height: ' + (pokemon.height) * 10 + ' cm <br>Weight: ' + (pokemon.weight) / 10 + ' Kg </p>\n' +
                 '    </div>\n' +
                 '  </div>' +
                 '</div>');
@@ -60,11 +59,11 @@ function aficher_pokemons() {
                 let indice_type_courant = 1;
                 // Préparation de la propriété CSS du fond de la carte courante
                 let fond_carte_pokemon_courant = 'linear-gradient(to right, ';
-                pokemon.types.forEach(function( type) {
+                pokemon.types.forEach(function (type) {
                     // Création du badge de type du pokémon courant
                     $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill col-4 m-1 text-bolder text-white" style="background-color: #' + types_pokemons[type.type.name] + '">' + type.type.name + '</span>');
                     // Calcul du pourcentage que va prendre la couleur du type courant en couleur de fond
-                    let pourcentage = Math.round((indice_type_courant/nombre_types)*100);
+                    let pourcentage = Math.round((indice_type_courant / nombre_types) * 100);
                     // Actualisation de la propriété CSS du fond de la carte courante
                     fond_carte_pokemon_courant += '#' + types_pokemons[type.type.name] + ' ' + pourcentage + '%,';
                     // Actualisation de la valeur de l'indice dédié au type courant du pokémon courant
@@ -74,25 +73,31 @@ function aficher_pokemons() {
                 fond_carte_pokemon_courant = fond_carte_pokemon_courant.slice(0, -1) + ')';
                 // Création de la propriété CSS pour la carte de présentation courante
                 $('#pokemon-' + pokemon.id).css('background', fond_carte_pokemon_courant);
-            // Sinon, le pokémon courant n'a qu'un seul type
+                // Sinon, le pokémon courant n'a qu'un seul type
             } else {
                 // Création du badge de type du pokémon courant
                 $('#types-pokemon-' + pokemon.id).append('<span class="badge badge-pill col-4 m-1 text-bolder text-white" style="background-color: #' + types_pokemons[pokemon.types[0].type.name] + '">' + pokemon.types[0].type.name + '</span>');
                 // Génération de la propriété CSS pour attribuer une unique couleur de fond pour l'unique type du pokémon courant
                 $('#pokemon-' + pokemon.id).css('background-color', '#' + types_pokemons[pokemon.types[0].type.name]);
             }
-        }, "json");
+        });
     }
+}
+function copier_dans_presse_papier() {
+    navigator.clipboard.writeText($('#accessoire-tire').val());
+    $('#bouton-copie-presse-papier').tooltip('enable');
+    $('#bouton-copie-presse-papier').tooltip('show');
 }
 function tirage_item() {
     let indice_accessoire_max = accessoires.length;
     let indice_tire = Math.floor(Math.random() * indice_accessoire_max);
     $('#accessoire-tire').val(accessoires[indice_tire]);
 }
-function copier_dans_presse_papier() {
-    navigator.clipboard.writeText($('#accessoire-tire').val());
-    $('#bouton-copie-presse-papier').tooltip('enable');
-    $('#bouton-copie-presse-papier').tooltip('show');
+async function recuperer_informations_pokemon(indice_pokemon) {
+    // returns a promise that can be used later.
+    return $.get({
+        url: "https://pokeapi.co/api/v2/pokemon/" + indice_pokemon,
+    }, 'json');
 }
 // On attend que le document HTML soit chargé sur le navigateur du client avant d'effecteur les opérations souhaitées.
 $(document).ready(function () {
