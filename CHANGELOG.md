@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.0 (00/00/2024)](https://github.com/GerlariMin/PokeDraw/tree/2.0.0)
+
+_Refonte de l'application_
+
+### Fonctionnalités
+
+- Affichage d'un Pokémon aléatoire (1ère génération)
+- Possibilité de tirer au sort un item
+- Tableau de référence des Pokémons (1ère génération)
+
+### Langages
+
+- HTML 5
+- JavaScript Vanilla
+
+### Librairies
+
+- [Bootstrap 5.3.2](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+- [Font Awesome 6.5.2](https://fontawesome.com/v6/search)
+
+### API
+
+- [PokéAPI](https://pokeapi.co/docs/v2) pour la génération des cartes de présentation des Pokémons.
+
 ## [1.0.0 (14/02/2023)](https://github.com/GerlariMin/PokeDraw/tree/1.0.0)
 
 _Première version_
