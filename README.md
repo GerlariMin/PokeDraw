@@ -36,15 +36,27 @@
 
 ## API
 
-- [PokéAPI](https://pokeapi.co/docs/v2) pour la génération des cartes de présentation des Pokémons.
+- ~~[PokéAPI](https://pokeapi.co/docs/v2) pour la génération des cartes de présentation des Pokémons.~~
+- [Tyradex](https://tyradex.vercel.app/docs) en remplacement de [PokéAPI](https://pokeapi.co/docs/v2), pour la génération des cartes de présentation des Pokémons.
+- [Unsplash](https://unsplash.com/documentation) pour la génération d'image pour un item aléatoire à dessiner en supplément.
 
 ## Développement
 
+### v1
 - [x] Afficher les 151 premiers Pokémons (1ère génération)
 - [x] Proposer de tirer au sort un accessoire
 - [x] Choisir le nombre de Pokémons à visualiser
 - [ ] ~~Module de connexion~~ (abandonné)
 - [ ] ~~Sauvegarder le tirage~~ (abandonné)
+
+### v2
+- [x] Choix de la génération à afficher dans les cartes de référence
+- [x] Changement d'API pour les Pokémons, pour proposer les informations en français
+- [x] Utilisation d'une API pour les objets tiés au sort
+- [ ] Indicateur de chargement, en cas de process long
+- [ ] Permettre le délenchement d'un chronomètre
+- [ ] Permettre le paramétrage d'un chronomètre (facultatif)
+- [ ] Mettre à disposition un canva pour dessiner directement sur la page (facultatif)
 
 ## [Changelog](https://github.com/GerlariMin/PokeDraw/blob/main/CHANGELOG.md)
 

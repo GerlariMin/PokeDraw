@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="UTF-8">
         <link rel="icon" href="./assets/img/pokeball-color-shine.png">
@@ -23,30 +23,66 @@
                 </span>
             </div>
         </nav>
-        <div class="container-fluid mt-5">
+        <div class="col-10 container-fluid mt-5">
             <!-- Crédits Flaticon -->
-            <div class="col-10 mb-3 mx-auto">
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <a class="text-decoration-none" href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons"><i class="fa-solid fa-image"></i> Pokemon icons <strong>created by Darius Dan</strong> - Flaticon</a>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                <div class="alert alert-info alert-dismissible fade show" role="alert">
-                    <a class="text-decoration-none" href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons"><i class="fa-solid fa-image"></i> Pokemon icons <strong>created by Freepik</strong> - Flaticon</a>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <p>
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icons/pokemon" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan"><strong><i class="fa-solid fa-bullhorn"></i> Flaticon <i class="fa-solid fa-link"></i></strong></a>
+                    - Icônes créées par
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/gaming_1752776?term=pokemon&page=1&position=14&origin=tag&related_id=1752776"  rel="noreferrer nofollow noopener" target="_blank"title="Darirus Dan (1/3)"><strong>Darius Dan</strong> <i class="fa-solid fa-link"></i> (1/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/pokeballs_914725?term=pokeball&page=1&position=85&origin=search&related_id=914725" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan (2/3)"><strong>Darirus Dan</strong> <i class="fa-solid fa-link"></i> (2/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/pokeball_1181497?term=pokeball&page=1&position=31&origin=search&related_id=1181497" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan (3/3)"><strong>Darirus Dan</strong> <i class="fa-solid fa-link"></i> (3/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/egg_188924?term=pokemon&page=1&position=71&origin=tag&related_id=188924" rel="noreferrer nofollow noopener" target="_blank" title="Roundicons Freebies"><strong>Roundicons Freebies</strong> <i class="fa-solid fa-link"></i></a>,
+                </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <!-- Animation de chargement initiale -->
-            <div class="col-10 mx-auto text-center" id="pokemon-en-vedette-chargement">
-                <img alt="Icone de chargement" class="pokeball-roulante" src="./assets/img/pokeball-ice.png"/>
+            <!-- Titre Tirage au sort -->
+            <div class="alert alert-light text-center" role="alert">
+                <h1>Tirage au sort</h1>
             </div>
-
-            <div class="row col-10 m-1 mx-auto" id="pokemon-en-vedette">
+            <!-- Division qui contiendra le pokémon et l'objet tirés aléatoirement -->
+            <div class="justify-content-center m-1 mx-auto row" id="tirage-au-sort">
 
             </div>
+            <!-- Boutons d'action pour actualiser l'objet ou le pokémon tirés aléatoirement -->
+            <div class="justify-content-center mb-3 mt-3 row" id="boutons-tirage-au-sort">
+                <button type="button" class="btn btn-outline-dark col-4 ms-1 me-1" id="actualiser-objet"><i class="fa-solid fa-shuffle"></i> Objet aléatoire</button>
+                <button type="button" class="btn btn-outline-dark col-4 ms-1 me-1" id="actualiser-pokemon"><i class="fa-solid fa-shuffle"></i> Pokémon aléatoire</button>
+            </div>
+            <!-- Titre Références -->
+            <div class="alert alert-light text-center" role="alert">
+                <h1>Références</h1>
+            </div>
+            <!-- Boutons d'action pour actualiser les Pokémons à afficher par génération -->
+            <h4>Génération à afficher</h4>
+            <div class="btn-group btn-group-sm justify-content-center" id="boutons-generations-pokemons">
 
-            <div id="pokemons-references">
+            </div>
+            <!-- Affichage des cartes des Pokémons de la génération souhaitée -->
+            <div class="g-2 g-lg-2 justify-content-center m-1 mx-auto row row-cols-3 row-cols-lg-3" id="pokemons-references">
 
             </div>
         </div>
+        <!-- Modal affichant l'animation du chargement des cartes -->
+        <!--
+        <div class="modal fade" id="pokemon-en-chargement" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img alt="Icone de chargement" class="pokeball-capture mb-2" src="./assets/img/egg.png"/>
+                        <p><i class="fa-solid fa-hammer fa-shake"></i> Éclosion des Pokémons en cours...</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
     </body>
 </html>

@@ -6,9 +6,12 @@ _Refonte de l'application_
 
 ### Fonctionnalités
 
-- Affichage d'un Pokémon aléatoire (1ère génération)
+- Affichage d'un Pokémon aléatoire
 - Possibilité de tirer au sort un item
-- Tableau de référence des Pokémons (1ère génération)
+- Tableau de référence des Pokémons
+- Choix de la génération affichée sur le tableau de référence
+- Actualiser l'objet aléatoire
+- Actualiser le Pokémon aléatoire
 
 ### Langages
 
@@ -22,7 +25,8 @@ _Refonte de l'application_
 
 ### API
 
-- [PokéAPI](https://pokeapi.co/docs/v2) pour la génération des cartes de présentation des Pokémons.
+- [Tyradex](https://tyradex.vercel.app/docs) en remplacement de [PokéAPI](https://pokeapi.co/docs/v2), pour la génération des cartes de présentation des Pokémons.
+- [Unsplash](https://unsplash.com/documentation) pour la génération d'image pour un item aléatoire à dessiner en supplément.
 
 ## [1.0.0 (14/02/2023)](https://github.com/GerlariMin/PokeDraw/tree/1.0.0)
 
