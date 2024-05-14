@@ -1,0 +1,39 @@
+/* Empêcher le scroll horizontal */
+body {
+    overflow-x: hidden;
+}
+/* Animation faisant rouler horizontalement l'objet souhaité */
+@keyframes pokeballRoule {
+    0% {
+        transform: rotateZ(0deg);
+        left: -50%;
+    }
+    50% {
+        transform: rotateZ(180deg);
+        left: 50%;
+    }
+    100% {
+        transform: rotateZ(360deg);
+        left: 150%;
+    }
+}
+/* Animation faisant vibrer horizontalement l'objet souhaité */
+@keyframes pokeballCapture {
+    0% { transform: rotate(0deg) translateX(2px); }
+    25% { transform: rotate(-1deg) translateX(-2px); }
+    50% { transform: rotate(0deg) translateX(2px); }
+    75% { transform: rotate(1deg) translateX(-2px); }
+    100% { transform: rotate(0deg) translateX(2px); }
+}
+/* Classe appelant l'animation "pokeballCapture" */
+.pokeball-capture {
+    animation: pokeballCapture 1s linear infinite;
+    position: relative;
+    transform-origin: bottom center;
+}
+/* Classe appelant l'animation "pokeballRoule" */
+.pokeball-roulante {
+    animation: pokeballRoule 5s linear infinite;
+    position: relative;
+    transform-origin: bottom center;
+}

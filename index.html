@@ -1,63 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
     <head>
         <meta charset="UTF-8">
         <link rel="icon" href="./assets/img/pokeball-color-shine.png">
         <title>PokéDraw</title>
-        <!-- JQuery -->
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
-        <!-- Popper -->
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <!-- Font Awesome -->
-        <script src="./assets/library/fontawesome-free-6.3.0-web/js/all.js"></script>
-        <link type="text/css" rel="stylesheet" href="./assets/library/fontawesome-free-6.3.0-web/css/all.css" />
-        <!-- Firebase -->
-        <script src="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.2/firebase-ui-auth.css" />
+        <!-- https://www.bootstrapcdn.com/ -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+        <!-- https://cdnjs.com/libraries/font-awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- CryptoJS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Script personnalisé -->
-        <script src="./assets/js/index.js"></script>
-        <script src="./assets/js/firebase.js" type="module"></script>
-        <!-- <script src="./assets/js/stockage-local.js" type="module"></script> -->
+        <script src="assets/js/index.js"></script>
+        <link rel="stylesheet" href="assets/css/index.css">
     </head>
     <body>
-        <nav class="navbar navbar-dark bg-dark">
-            <!-- Navbar content -->
-            <a class="navbar-brand" href="#"> <img height="25px" width="25px" src="./assets/img/pokeballs.png"> PokéDraw</a>
-            <!-- <a class="btn btn-success" href="./assets/html/connexion.html" id="bouton-page-connexion" type="button"><i class="fa-solid fa-user"></i> Connexion</a> -->
+        <!-- Barre de navigation de la page -->
+        <nav class="bg-body-tertiary mb-5 navbar sticky-top">
+            <div class="container-fluid">
+                <h1 class="navbar-brand"><img alt="Logo du site Web" height="25px" src="./assets/img/pokeballs.png" width="25px"/> PokéDraw</h1>
+                <span class="navbar-text">
+                    <a href="https://github.com/GerlariMin" rel="noreferrer nofollow noopener" target="_blank"><button class="btn btn-outline-dark" type="button"><i class="fa-brands fa-github"></i></button></a>
+                </span>
+            </div>
         </nav>
-        <div class="container-fluid mt-5">
-            <div class="mb-3">
-                <div class="alert alert-info" role="alert">
-                    <a class="text-decoration-none" href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons"><i class="fa-solid fa-image"></i> Pokemon icons created by Darius Dan - Flaticon</a>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="alert alert-info" role="alert">
-                    <a class="text-decoration-none" href="https://www.flaticon.com/free-icons/pokemon" title="pokemon icons"><i class="fa-solid fa-image"></i> Pokemon icons created by Freepik - Flaticon</a>
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+        <div class="col-10 container-fluid mt-5">
+            <!-- Crédits Flaticon -->
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <p>
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icons/pokemon" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan"><strong><i class="fa-solid fa-bullhorn"></i> Flaticon <i class="fa-solid fa-link"></i></strong></a>
+                    - Icônes créées par
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/gaming_1752776?term=pokemon&page=1&position=14&origin=tag&related_id=1752776"  rel="noreferrer nofollow noopener" target="_blank"title="Darirus Dan (1/3)"><strong>Darius Dan</strong> <i class="fa-solid fa-link"></i> (1/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/pokeballs_914725?term=pokeball&page=1&position=85&origin=search&related_id=914725" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan (2/3)"><strong>Darirus Dan</strong> <i class="fa-solid fa-link"></i> (2/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/pokeball_1181497?term=pokeball&page=1&position=31&origin=search&related_id=1181497" rel="noreferrer nofollow noopener" target="_blank" title="Darirus Dan (3/3)"><strong>Darirus Dan</strong> <i class="fa-solid fa-link"></i> (3/3)</a>,
+                    <a class="text-decoration-none text-dark" href="https://www.flaticon.com/free-icon/egg_188924?term=pokemon&page=1&position=71&origin=tag&related_id=188924" rel="noreferrer nofollow noopener" target="_blank" title="Roundicons Freebies"><strong>Roundicons Freebies</strong> <i class="fa-solid fa-link"></i></a>,
+                </p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <button class="btn btn-info btn-lg btn-block mb-3" id="bouton-tirage-accessoire" type="button"><i class="fa-solid fa-dice"></i> Tirage de l'item</button>
-            <div class="row mb-3">
-                <div class="col-11">
-                    <input class="form-control text-center mb-5" id="accessoire-tire" placeholder="Cliquez sur le bouton pour tirer un item au sort..." readonly type="text">
-                </div>
-                <div class="col-1">
-                    <button class="btn btn-light btn-block" id="bouton-copie-presse-papier" type="button" data-toggle="tooltip" data-placement="bottom" title="Texte copié!"><i class="fa-solid fa-copy"></i></button>
-                </div>
+            <!-- Titre Tirage au sort -->
+            <div class="alert alert-light text-center" role="alert">
+                <h1>Tirage au sort</h1>
             </div>
-            <label id="label-affichage-pokemons" for="affichage-pokemons">Nombre de Pokémon affiché(s): <span id="nombre-pokemons-affiches">151</span></label>
-            <input class="custom-range mb-5" id="affichage-pokemons" min="1" max="151" step="1" type="range" value="151">
-            <!-- Division qui contiendra l'affichage des pokémons -->
-            <div class="row" id="cartes-pokemons">
+            <!-- Division qui contiendra le pokémon et l'objet tirés aléatoirement -->
+            <div class="justify-content-center m-1 mx-auto row" id="tirage-au-sort">
+
+            </div>
+            <!-- Boutons d'action pour actualiser l'objet ou le pokémon tirés aléatoirement -->
+            <div class="justify-content-center mb-3 mt-3 row" id="boutons-tirage-au-sort">
+                <button type="button" class="btn btn-outline-dark col-4 ms-1 me-1" id="actualiser-objet"><i class="fa-solid fa-shuffle"></i> Objet aléatoire</button>
+                <button type="button" class="btn btn-outline-dark col-4 ms-1 me-1" id="actualiser-pokemon"><i class="fa-solid fa-shuffle"></i> Pokémon aléatoire</button>
+            </div>
+            <!-- Titre Références -->
+            <div class="alert alert-light text-center" role="alert">
+                <h1>Références</h1>
+            </div>
+            <!-- Boutons d'action pour actualiser les Pokémons à afficher par génération -->
+            <h4>Génération à afficher</h4>
+            <div class="btn-group btn-group-sm justify-content-center" id="boutons-generations-pokemons">
+
+            </div>
+            <!-- Affichage des cartes des Pokémons de la génération souhaitée -->
+            <div class="g-2 g-lg-2 justify-content-center m-1 mx-auto row row-cols-3 row-cols-lg-3" id="pokemons-references">
 
             </div>
         </div>
+        <!-- Modal affichant l'animation du chargement des cartes -->
+        <!--
+        <div class="modal fade" id="pokemon-en-chargement" tabindex="-1" aria-labelledby="modal-chargement-pokemon" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modal-chargement-pokemon">Chargement en cours...</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img alt="Icone de chargement" class="pokeball-capture mb-2" src="./assets/img/egg.png"/>
+                        <p><i class="fa-solid fa-hammer fa-shake"></i> Éclosion des Pokémons en cours...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
     </body>
 </html>
