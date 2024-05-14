@@ -1,5 +1,9 @@
 // On attend le chargement de la page HTML
 document.addEventListener("DOMContentLoaded", async function () {
+    // Clé
+    const cle = 'bHhOM3Z6eDdFQE9uc0xLQyRmTzdhbUVB'
+    // Modal de chargement Bootstrap
+    //const modalChargement = new bootstrap.Modal(document.getElementById('pokemon-en-chargement'));
     // Tableau de conversion type <=> couleur hexadécimale
     const pokemonsTypesToCouleurs = {
         'acier' : '4D97AE',
@@ -22,8 +26,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         'ténèbres' : '483938',
         'vol' : '6FB1E9',
     };
+    // Tokken
+    const tokken = 'U2FsdGVkX19Sv3SezicvatlX3xB1KDpCOx0a+IILRkRvPvRDXqpmw+48Bo5wRCJzzXvnKgMua4xJgR4pSyHExQ==';
     // Usage de l'API Tyradex pour la récupération des informations des pokémons
     const urlAPIPokemon = 'https://tyradex.vercel.app/api/v1/';
+    // informations sur les générations des Pokémons
+    let generations;
     // Numéro du dernier Pokémon pouvant être tiré au sort
     let idPokemonMax = 151;
     // Numéro du premier Pokémon pouvant être tiré au sort
@@ -31,71 +39,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Numéro du Pokémon qui est tiré au sort
     let idTireAuSort;
     // Afficher le modal de chargement
-    //const myModal = new bootstrap.Modal(document.getElementById('pokemon-en-chargement'), 'show');
-    // Retrait du modal de chargement
-    //myModal.Modal(document.getElementById('pokemon-en-chargement'), 'hide');
-    // Tirage au sort d'un numéro de Pokémon
-    idTireAuSort = tirageAuSortUnPokemon();
-    // Afficher le Pokémon tiré au sort
-    await afficherUnPokemon(idTireAuSort);
-    // Récupération des différentes générations de Pokémons
-    let generations = await recupererInformationsGenPokemons();
-    // Parcourt de l'ensemble des générations
-    generations.forEach((gen) => {
-        // Par défaut, c'est la première génération qui est affichée, donc on met la classe dédiée
-        let actif = (gen.generation === 1) ? 'active' : '';
-        // Génération du bouton sur l'interface
-        document.getElementById('boutons-generations-pokemons').insertAdjacentHTML("beforeend", '<button class="btn btn-outline-dark generations ' + actif + '" id="generation-' + gen.generation + '" type="button" value="' + gen.generation + '"><i class="fa-solid fa-layer-group"></i> ' + gen.generation + '</button>');
-        // Génération de l'interaction qui se produira lors du clique utilisateur sur le bouton
-        document.getElementById('generation-' + gen.generation).addEventListener('click', async function () {
-            // Suppression de la classe active sur les autres boutons de choix de génération à afficher
-            document.querySelectorAll('.generations.active').forEach((bouton) => {
-                bouton.classList.remove('active');
-            });
-            // Ajout de la classe active pour indiquer quelle génération de Pokémon est affichée
-            this.classList.add('active');
-            // Actualiser les références de Pokémons affichées
-            await afficherListeReference(this.value);
-            // Actualiser les numéros min et max des Pokémons pouvant être tirés au sort
-            idPokemonMax = gen.to;
-            idPokemonMin = gen.from;
-        });
-    });
-    // Cas particulier du bouton permettant d'afficher toutes les génération
-    // Génération du bouton sur l'interface
-    document.getElementById('boutons-generations-pokemons').insertAdjacentHTML("beforeend", '<button class="btn btn-outline-dark generations" id="generation-toutes" type="button" value="0"><i class="fa-solid fa-layer-group"></i> Toutes</button>');
-    // Génération de l'interaction qui se produira lors du clique utilisateur sur le bouton
-    document.getElementById('generation-toutes').addEventListener('click', async function () {
-        // Suppression de la classe active sur les autres boutons de choix de génération à afficher
-        document.querySelectorAll('.generations.active').forEach((bouton) => {
-            bouton.classList.remove('active');
-        });
-        // Ajout de la classe active pour indiquer quelle génération de Pokémon est affichée
-        this.classList.add('active');
-        // Actualiser les références de Pokémons affichées
-        await afficherListeReference(this.value);
-        // Actualiser les numéros min et max des Pokémons pouvant être tirés au sort
-        idPokemonMax = 1;
-        idPokemonMin = 1025;
-    });
-    // Affichage des Pokémons références
-    await afficherListeReference();
-
-    document.getElementById('actualiser-objet').addEventListener('click', async () => {
-        if (document.getElementById('objet-aleatoire')) {
-            document.getElementById('objet-aleatoire').remove();
-        }
-        let objetAleatoire = await recupererInformationsUnItem();
-        document.getElementById('tirage-au-sort').insertAdjacentHTML("afterbegin", genererCarteItem(objetAleatoire));
-    });
-
-    document.getElementById('actualiser-pokemon').addEventListener('click', async () => {
-        if (document.getElementById('pokemon-aleatoire')) {
-            document.getElementById('pokemon-aleatoire').remove();
-        }
-        let identifiantPokemonAleatoire = tirageAuSortUnPokemon();
-        await afficherUnPokemon(identifiantPokemonAleatoire);
-    });
+    //modalChargement.show();
+    // Initialisation du bloc "Tirage au sort"
+    await initialisationBlocTirageAuSort();
+    // Initialisation du bloc "Référénces"
+    await initialisationBlocReferences();
+    // Mise en place des écouteurs pour les actions a effectuer dynamiquement tout au long de la navigation
+    initialisationEcouteurs();
+    // Masquer le modal de chargement
+    //modalChargement.hide();
 
     /**
      * Fonction dédiée à la génération des cartes des Pokémons d'une génération souhaitée.
@@ -142,6 +94,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById('tirage-au-sort').insertAdjacentHTML("beforeend", genererCartePokemon(pokemon))
     }
 
+    /**
+     * Fonction créant la carte HTML pour afficher l'image d'un objet.
+     *
+     * @param image - Objet revenant de l'API Unsplash
+     * @returns {string}
+     */
     function genererCarteItem(image) {
         return '<div class="col-4 p-1" id="objet-aleatoire">\n' +
             '    <div class="card h-100 text-center">\n' +
@@ -150,6 +108,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             '</div>\n';
     }
 
+    /**
+     * Fonction créant la carte HTML pour afficher un Pokémon.
+     *
+     * @param pokemon - Objet provenant de l'API Tyradex.
+     * @returns {string}
+     */
     function genererCartePokemon(pokemon) {
         let badgesPokemon = '';
         let couleurCartePokemon = '';
@@ -200,6 +164,103 @@ document.addEventListener("DOMContentLoaded", async function () {
                 '</div>\n';
     }
 
+    /**
+     * Initialisation du bloc "Références".
+     *
+     * @returns {Promise<void>}
+     */
+    async function initialisationBlocReferences() {
+        // Récupération des différentes générations de Pokémons
+        generations = await recupererInformationsGenPokemons();
+        // Parcourt de l'ensemble des générations
+        generations.forEach((gen) => {
+            // Par défaut, c'est la première génération qui est affichée, donc on met la classe dédiée
+            let actif = (gen.generation === 1) ? 'active' : '';
+            // Génération du bouton sur l'interface
+            document.getElementById('boutons-generations-pokemons').insertAdjacentHTML("beforeend", '<button class="btn btn-outline-dark generations ' + actif + '" id="generation-' + gen.generation + '" type="button" value="' + gen.generation + '"><i class="fa-solid fa-layer-group"></i> ' + gen.generation + '</button>');
+            // Génération de l'interaction qui se produira lors du clique utilisateur sur le bouton
+            document.getElementById('generation-' + gen.generation).addEventListener('click', async function () {
+                // Suppression de la classe active sur les autres boutons de choix de génération à afficher
+                document.querySelectorAll('.generations.active').forEach((bouton) => {
+                    bouton.classList.remove('active');
+                });
+                // Ajout de la classe active pour indiquer quelle génération de Pokémon est affichée
+                this.classList.add('active');
+                // Actualiser les références de Pokémons affichées
+                await afficherListeReference(this.value);
+                // Actualiser les numéros min et max des Pokémons pouvant être tirés au sort
+                idPokemonMax = gen.to;
+                idPokemonMin = gen.from;
+            });
+        });
+        // Cas particulier du bouton permettant d'afficher toutes les générations
+        // Génération du bouton sur l'interface
+        document.getElementById('boutons-generations-pokemons').insertAdjacentHTML("beforeend", '<button class="btn btn-outline-dark generations" id="generation-toutes" type="button" value="0"><i class="fa-solid fa-layer-group"></i> Toutes</button>');
+        // Génération de l'interaction qui se produira lors du clique utilisateur sur le bouton
+        document.getElementById('generation-toutes').addEventListener('click', async function () {
+            // Suppression de la classe active sur les autres boutons de choix de génération à afficher
+            document.querySelectorAll('.generations.active').forEach((bouton) => {
+                bouton.classList.remove('active');
+            });
+            // Ajout de la classe active pour indiquer quelle génération de Pokémon est affichée
+            this.classList.add('active');
+            // Actualiser les références de Pokémons affichées
+            await afficherListeReference(this.value);
+            // Actualiser les numéros min et max des Pokémons pouvant être tirés au sort
+            idPokemonMax = 1;
+            idPokemonMin = 1025;
+        });
+        // Affichage des Pokémons références
+        await afficherListeReference();
+    }
+
+    /**
+     * Initialisation du bloc "Tirage au sort".
+     *
+     * @returns {Promise<void>}
+     */
+    async function initialisationBlocTirageAuSort() {
+        // Tirage au sort d'un numéro de Pokémon
+        idTireAuSort = tirageAuSortUnPokemon();
+        // Afficher le Pokémon tiré au sort
+        await afficherUnPokemon(idTireAuSort);
+    }
+
+    /**
+     * Fonction permettant d'initialiser les écouteurs pour effectuer des actions dynamiquement.
+     */
+    function initialisationEcouteurs() {
+        // Ajout d'un écouteur pour prendre en charge les actions à effectuer après avoir cliqué sur le bouton "Objet aléatoire"
+        document.getElementById('actualiser-objet').addEventListener('click', async () => {
+            // Si un objet aléatoire a déjà été affiché
+            if (document.getElementById('objet-aleatoire')) {
+                // On supprime l'élément HTML
+                document.getElementById('objet-aleatoire').remove();
+            }
+            // On récupère les informations retournées par l'API Unsplash
+            let objetAleatoire = await recupererInformationsUnItem();
+            // On génère de nouveau une carte affichant l'objet aléatoirement récupéré par l'API
+            document.getElementById('tirage-au-sort').insertAdjacentHTML("afterbegin", genererCarteItem(objetAleatoire));
+        });
+        // Ajout d'un écouteur pour prendre en charge les actions à effectuer après avoir cliqué sur le bouton "Pokémon aléatoire"
+        document.getElementById('actualiser-pokemon').addEventListener('click', async () => {
+            // Si un Pokémon aléatoire a déjà été affiché
+            if (document.getElementById('pokemon-aleatoire')) {
+                // On supprime l'élément HTML
+                document.getElementById('pokemon-aleatoire').remove();
+            }
+            // On récupère les informations retournées par l'API Tyradex
+            let identifiantPokemonAleatoire = tirageAuSortUnPokemon();
+            // On génère de nouveau une carte affichant le Pokémon aléatoirement récupéré par l'API
+            await afficherUnPokemon(identifiantPokemonAleatoire);
+        });
+    }
+
+    /**
+     * Appel de l'API Tyradex pour récupérer des informations sur toutes les générations de Pokémons.
+     *
+     * @returns {Promise<any>}
+     */
     async function recupererInformationsGenPokemons() {
         // La fonction retourne le résultat de l'API Tyradex
         return await fetch(urlAPIPokemon + "gen")
@@ -209,6 +270,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
     }
 
+    /**
+     * Appel de l'API Tyradex pour récupérer des informations sur tous les Pokémons.
+     *
+     * @returns {Promise<any>}
+     */
     async function recupererInformationsPokemons() {
         // La fonction retourne le résultat de l'API Tyradex
         return await fetch(urlAPIPokemon + "pokemon")
@@ -218,6 +284,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
     }
 
+    /**
+     * Appel de l'API Tyradex pour récupéerer les informations des Pokémons d'une génération donnée.
+     *
+     * @param generation - indice de la génération correspondant à l'indice de l'API Tyradex.
+     * @returns {Promise<any>}
+     */
     async function recupererInformationsUneGenPokemons(generation) {
         // La fonction retourne le résultat de l'API Tyradex
         return await fetch(urlAPIPokemon + "gen/" + generation)
@@ -227,14 +299,25 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
     }
 
+    /**
+     * Récupération des données de l'API Unsplash, accompagnant une image choisie au hasard, correspondante au thème "object".
+     *
+     * @returns {Promise<any>}
+     */
     async function recupererInformationsUnItem() {
-        return await fetch("https://api.unsplash.com/photos/random?client_id=2s8z36ff69y94Pu919qPqD2VBrjfG4ZQyOkHo2oOdhc&query=object&orientation=portrait")
+        return await fetch("https://api.unsplash.com/photos/random?client_id=" + CryptoJS.AES.decrypt(tokken, atob(cle)).toString(CryptoJS.enc.Utf8) + "&orientation=portrait&query=object")
             .then(response => response.json())
             .then(data => {
                 return data;
             });
     }
 
+    /**
+     * Récupération des informations pour un Pokémon donné, via l'API Tyradex.
+     *
+     * @param identifiant - id du Pokémon, selon l'API Tyraex.
+     * @returns {Promise<any>}
+     */
     async function recupererInformationsUnPokemon(identifiant) {
         // La fonction retourne le résultat de l'API Tyradex
         return await fetch(urlAPIPokemon + "pokemon/" + identifiant)
@@ -244,6 +327,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
     }
 
+    /**
+     * Tyrage au sort d'un identifiant compris dans un interval qui s'actualise en fonction des Pokémons affichés dans le bloc "Références".
+     *
+     * @returns {number}
+     */
     function tirageAuSortUnPokemon() {
         return Math.floor(Math.random() * (idPokemonMax - idPokemonMin + 1) + idPokemonMin);
     }
